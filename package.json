@@ -1,0 +1,70 @@
+{
+	"name": "vscode-apl-language-client",
+	"description": "APL language client for VS Code",
+	"author": "Gilgamesh Athoraya",
+	"license": "MIT",
+	"version": "1.0.0",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/e9gille/vscode-apl-language-client"
+	},
+	"publisher": "e9gille",
+	"categories": [
+		"Programming Languages"
+	],
+	"keywords": [
+		"apl",
+		"intellisense",
+		"autocompletion",
+		"help"
+	],
+	"engines": {
+		"vscode": "^1.26.0"
+	},
+	"activationEvents": [
+		"onLanguage:apl",
+		"workspaceContains:**/*.dyalog"
+	],
+	"main": "./client/out/extension",
+	"contributes": {
+		"configuration": {
+			"type": "object",
+			"title": "Example configuration",
+			"properties": {
+				"aplLanguageServer.maxNumberOfProblems": {
+					"scope": "resource",
+					"type": "number",
+					"default": 100,
+					"description": "Controls the maximum number of problems produced by the server."
+				},
+				"aplLanguageServer.trace.server": {
+					"scope": "window",
+					"type": "string",
+					"enum": [
+						"off",
+						"messages",
+						"verbose"
+					],
+					"default": "off",
+					"description": "Traces the communication between VS Code and the language server."
+				}
+			}
+		}
+	},
+	"scripts": {
+		"vscode:prepublish": "cd client && npm run update-vscode && cd .. && npm run compile",
+		"compile": "tsc -p .",
+		"watch": "tsc -w -p .",
+		"postinstall": "cd client && npm install && cd ../server && npm install && cd ..",
+		"test": "sh ./scripts/e2e.sh"
+	},
+	"devDependencies": {
+		"@types/mocha": "^5.2.0",
+		"@types/node": "^8.0.0",
+		"typescript": "2.8.3"
+	},
+	"dependencies": {
+		"vscode": "^1.1.21",
+		"vscode-languageclient": "^5.1.0"
+	}
+}
