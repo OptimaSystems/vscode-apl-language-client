@@ -27,17 +27,33 @@
 	],
 	"main": "./out/extension",
 	"contributes": {
-		"languages": [{
-            "id": "apl",
-            "aliases": ["apl", "apl"],
-            "extensions": [".dyalog",".dyapp",".aplf",".aplo",".aplc",".apli",".apln",".apla"],
-            "configuration": "./language-configuration.json"
-        }],
-        "grammars": [{
-            "language": "apl",
-            "scopeName": "source.apl",
-            "path": "./syntaxes/apl.tmLanguage.json"
-        }],
+		"languages": [
+			{
+				"id": "apl",
+				"aliases": [
+					"apl",
+					"dyalog"
+				],
+				"extensions": [
+					".dyalog",
+					".dyapp",
+					".aplf",
+					".aplo",
+					".aplc",
+					".apli",
+					".apln",
+					".apla"
+				],
+				"configuration": "./language-configuration.json"
+			}
+		],
+		"grammars": [
+			{
+				"language": "apl",
+				"scopeName": "source.apl",
+				"path": "./syntaxes/apl.tmLanguage.json"
+			}
+		],
 		"configuration": {
 			"type": "object",
 			"title": "APL configuration",
@@ -64,6 +80,8 @@
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run update-vscode && npm run compile",
+		"update-vscode": "node ./node_modules/vscode/bin/install",
+		"postinstall": "node ./node_modules/vscode/bin/install",
 		"compile": "tsc -p .",
 		"watch": "tsc -w -p .",
 		"test": "sh ./scripts/e2e.sh"
