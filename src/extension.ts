@@ -5,59 +5,76 @@
 'use strict';
 
 // import * as path from 'path';
-import { workspace, ExtensionContext } from 'vscode';
+import {
+	window,
+	commands,
+	workspace,
+	ExtensionContext
+} from 'vscode';
 
 import {
 	LanguageClient,
 	LanguageClientOptions,
 	StreamInfo
 } from 'vscode-languageclient';
-import { ChildProcess, spawn } from 'child_process';
+import {
+	ChildProcess,
+	spawn
+} from 'child_process';
 import * as net from 'net';
 
 let client: LanguageClient;
 
-export function activate(context: ExtensionContext) {
+export async function activate(context: ExtensionContext) {
 	const conf = workspace.getConfiguration('apl');
-    const executablePath = conf.get<string>('executablePath') || 'mapl';
+
+	const memoryLimit = conf.get<string>('memoryLimit') || '4G';
+	if (memoryLimit !== '-1' && !/^\d+[KMG]?$/.exec(memoryLimit)) {
+		const selected = await window.showErrorMessage(
+			'The memory limit you\'d provided is not numeric, nor "-1" nor valid Dyalog shorthand notation!',
+			'Open settings'
+		);
+		if (selected === 'Open settings') {
+			await commands.executeCommand('workbench.action.openGlobalSettings');
+		}
+		return;
+	}
+	const executablePath = conf.get<string>('executablePath') ||
+		/^win/.test(process.platform) ? 'dyalog.exe' : 'mapl';
 
 	const serverOptions = () => new Promise<ChildProcess | StreamInfo>((resolve) => {
-        // Use a TCP socket because of problems with blocking STDIO
-        const server = net.createServer(socket => {
-            // 'connection' listener
-            console.log('APL LS process connected');
-            socket.on('end', () => {
-                console.log('APL LS process disconnected');
-            });
-            server.close();
-            resolve({ reader: socket, writer: socket });
-        });
-        // Listen on random port
-        server.listen(0, '127.0.0.1', () => {
+		// Use a TCP socket because of problems with blocking STDIO
+		const server = net.createServer(socket => {
+			// 'connection' listener
+			console.log('APL LS process connected');
+			socket.on('end', () => {
+				console.log('APL LS process disconnected');
+			});
+			server.close();
+			resolve({ reader: socket, writer: socket });
+		});
+		// Listen on random port
+		server.listen(0, '127.0.0.1', () => {
 			// The server is implemented in APL
 			const adr = server.address();
 			const hp = `${adr.address}:${adr.port}`;
-			
+
 			let args = ['+s', '-q'];
 			const stdio = ['pipe', 'ignore', 'ignore'];
 			if (/^win/i.test(process.platform)) { args = []; stdio[0] = 'ignore'; }
-            
-			const childProcess = spawn(executablePath, 
-			// 	[
-            //     context.asAbsolutePath(path.join('vendor', 'felixfbecker', 'language-server', 'bin', 'php-language-server.php')),
-            //     '--tcp=127.0.0.1:' + server.address().port,
-            //     '--memory-limit=' + memoryLimit
-			// ],
-				args, 
+
+			const childProcess = spawn(executablePath,
+				args,
 				{
 					stdio,
 					detached: true,
 					env: Object.assign(
-						{}, process.env, 
+						{}, process.env,
 						{
 							CLASSICMODE: 1,
 							SINGLETRACE: 1,
 							RIDE_INIT: 'SERVE::4562',
+							MAXWS: memoryLimit,
 							RIDE_SPAWNED: '1',
 							AUTOCOMPLETE_PREFIXSIZE: 0,
 							LSP_TCP: hp,
@@ -65,16 +82,16 @@ export function activate(context: ExtensionContext) {
 					),
 				},
 			);
-            childProcess.stderr.on('data', (chunk: Buffer) => {
-                console.error(chunk + '');
-            });
-            childProcess.stdout.on('data', (chunk: Buffer) => {
-                console.log(chunk + '');
-            });
-            return childProcess;
-        });
+			childProcess.stderr.on('data', (chunk: Buffer) => {
+				console.error(chunk + '');
+			});
+			childProcess.stdout.on('data', (chunk: Buffer) => {
+				console.log(chunk + '');
+			});
+			return childProcess;
+		});
 	});
-	
+
 	// If the extension is launched in debug mode then the debug server options are used
 	// Otherwise the run options are used
 	// let serverOptions: ServerOptions = {
@@ -101,11 +118,11 @@ export function activate(context: ExtensionContext) {
 	// 	run : { command: serverMain, args, options, transport },
 	// 	debug : { command: serverMain, args, options, transport }
 	// }
-	
+
 	// Options to control the language client
 	let clientOptions: LanguageClientOptions = {
 		// Register the server for F# documents
-		documentSelector: [{scheme: 'file', language: 'apl'}],
+		documentSelector: [{ scheme: 'file', language: 'apl' }],
 		synchronize: {
 			// Synchronize the setting section 'languageServerExample' to the server
 			configurationSection: 'apl',
@@ -119,11 +136,11 @@ export function activate(context: ExtensionContext) {
 			]
 		}
 	}
-	
+
 	// Create the language client and start the client.
 	let client = new LanguageClient('apl', 'APL Language Server', serverOptions, clientOptions);
 	let disposable = client.start();
-	
+
 	// Push the disposable to the context's subscriptions so that the 
 	// client can be deactivated on extension deactivation
 	context.subscriptions.push(disposable);

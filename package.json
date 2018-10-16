@@ -56,15 +56,15 @@
 		],
 		"configuration": {
 			"type": "object",
-			"title": "APL configuration",
+			"title": "APL",
 			"properties": {
-				"aplLanguageServer.maxNumberOfProblems": {
+				"apl.maxNumberOfProblems": {
 					"scope": "resource",
 					"type": "number",
 					"default": 100,
 					"description": "Controls the maximum number of problems produced by the server."
 				},
-				"aplLanguageServer.trace.server": {
+				"apl.trace.server": {
 					"scope": "window",
 					"type": "string",
 					"enum": [
@@ -74,7 +74,26 @@
 					],
 					"default": "off",
 					"description": "Traces the communication between VS Code and the language server."
-				}
+				},
+				"apl.memoryLimit": {
+					"type": "string",
+					"default": "4G",
+					"description": "The memory limit of the APL language server. [Number][K|M|G]. Use '-1' to allow unlimited use of the RAM (default is 4G).",
+					"pattern": "^\\d+[KMG]?$"
+				  },
+				"apl.executablePath": {
+					"type": [
+					  "string",
+					  "null"
+					],
+					"default": null,
+					"description": "The path to a Dyalog executable."
+				  }
+			}
+		},
+		"configurationDefaults": {
+			"[apl]": {
+				"editor.fontFamily": "APL385 Unicode, Consolas, 'Courier New', monospace"
 			}
 		}
 	},
