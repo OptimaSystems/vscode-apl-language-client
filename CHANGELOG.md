@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+## 0.0.5
+- update embedded language server
+
 ## 0.0.4
 - removed extension dependency (it prevented this extension from loading)
 - update embedded language server
