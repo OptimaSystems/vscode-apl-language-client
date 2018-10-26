@@ -1,14 +1,23 @@
 {
 	"name": "vscode-apl-language-client",
-	"description": "APL language client for VS Code",
-	"author": "Gilgamesh Athoraya",
+    "displayName": "APL Language Server Client",
+	"description": "APL Language Server client for VS Code",
+	"version": "0.0.1",
+    "publisher": "OptimaSystems",
+    "author": {
+        "email": "gil@optima-systems.co.uk",
+        "name": "Gilgamesh Athoraya",
+        "url": "https://github.com/e9gille"
+    },
 	"license": "MIT",
-	"version": "1.0.0",
+    "icon": "images/logo.png",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/e9gille/vscode-apl-language-client"
+		"url": "https://github.com/optimasystems/vscode-apl-language-client.git"
 	},
-	"publisher": "e9gille",
+	"engines": {
+		"vscode": "^1.26.0"
+	},
 	"categories": [
 		"Programming Languages"
 	],
@@ -18,82 +27,43 @@
 		"autocompletion",
 		"help"
 	],
-	"engines": {
-		"vscode": "^1.26.0"
-	},
 	"activationEvents": [
 		"onLanguage:apl",
 		"workspaceContains:**/*.dyalog"
 	],
 	"main": "./out/extension",
 	"contributes": {
-		"languages": [
-			{
-				"id": "apl",
-				"aliases": [
-					"apl",
-					"dyalog"
-				],
-				"extensions": [
-					".dyalog",
-					".dyapp",
-					".aplf",
-					".aplo",
-					".aplc",
-					".apli",
-					".apln",
-					".apla"
-				],
-				"configuration": "./language-configuration.json"
-			}
-		],
-		"grammars": [
-			{
-				"language": "apl",
-				"scopeName": "source.apl",
-				"path": "./syntaxes/apl.tmLanguage.json"
-			}
-		],
 		"configuration": {
 			"type": "object",
 			"title": "APL",
 			"properties": {
-				"apl.maxNumberOfProblems": {
-					"scope": "resource",
-					"type": "number",
-					"default": 100,
-					"description": "Controls the maximum number of problems produced by the server."
-				},
-				"apl.trace.server": {
-					"scope": "window",
-					"type": "string",
-					"enum": [
-						"off",
-						"messages",
-						"verbose"
-					],
-					"default": "off",
-					"description": "Traces the communication between VS Code and the language server."
-				},
-				"apl.memoryLimit": {
+				"apl.server.maxWS": {
 					"type": "string",
 					"default": "4G",
-					"description": "The memory limit of the APL language server. [Number][K|M|G]. Use '-1' to allow unlimited use of the RAM (default is 4G).",
+					"description": "The memory limit of the APL language server. [Number][M|G]. Use '-1' to allow unlimited use of the RAM (default is 4G).",
 					"pattern": "^\\d+[KMG]?$"
-				  },
-				"apl.executablePath": {
+				},
+				"apl.server.executablePath": {
 					"type": [
 					  "string",
 					  "null"
 					],
 					"default": null,
 					"description": "The path to a Dyalog executable."
-				  }
-			}
-		},
-		"configurationDefaults": {
-			"[apl]": {
-				"editor.fontFamily": "APL385 Unicode, Consolas, 'Courier New', monospace"
+				},
+				"apl.server.wsPath": {
+					"type": [
+					  "string",
+					  "null"
+					],
+					"default": null,
+					"description": "The path to a Language server workspace."
+				},
+				"apl.server.prefixCompleteCharacters": {
+					"type": "string",
+					"default": "`",
+					"description": "Prefix character used for entering APL primitives."
+				}
 			}
 		}
 	},

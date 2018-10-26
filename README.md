@@ -1,38 +1,44 @@
-# LSP Example
+# APL Language Server Client
 
-Heavily documented sample code for https://code.visualstudio.com/docs/extensions/example-language-server.
+This extension implements the client for an APL Language Server. The server is embedded with the extension, but has its own repository on [APL Language Server](https://github.com/optimasystems/apl-language-server). Please report issues or feature requests to that project.
 
-## Functionality
+The language server requires a copy of Dyalog v17.0. Get your copy on [Download Dyalog](https://www.dyalog.com/download-zone.htm).
 
-This Language Server works for plain text file. It has the following language features:
-- Completions
-- Diagnostics regenerated on each file change or configuration change
+## Features
 
-It also includes an End-to-End test.
+This Language Server works for apl files. It has the following language features:	
 
-## Structure
+### Tool tips on primitives
+								   
+![tooltips](images/tooltips.gif)
 
+### Prefix completion
+
+Prefix completion to simplify typing APL primitives without an IME.
+
+![prefixComplete](images/prefixComplete.gif)
+
+## Configuration
+
+This extension has the configuration options listed below:
+
+```json
+{
+    "apl.server.executablePath": "dyalog.exe",
+    "apl.server.maxWS": "4G",
+    "apl.server.prefixCompleteCharacters": "`",
+    "apl.server.wsPath": "/my/own/apl-language-server.dws"
+}
 ```
-.
-├── client // Language Client
-│   ├── src
-│   │   ├── test // End to End tests for Language Client / Server
-│   │   └── extension.ts // Language Client entry point
-├── package.json // The extension manifest.
-└── server // Language Server
-    └── src
-        └── server.ts // Language Server entry point
-```
 
-## Compile and Run
+The language server requires a copy of Dyalog v17.0. You can provide a path to the executable in `apl.server.executablePath` to ensure the correct version of Dyalog is used (if you have more than one).
 
-- Run `npm install` in this folder. This installs all necessary npm modules in both the client and server folder
-- Open VS Code on this folder.
-- Press Ctrl+Shift+B to compile the client and server.
-- Switch to the Debug viewlet.
-- Select `Launch Client` from the drop down.
-- Run the lauch config.
-- If you want to debug the server as well use the launch configuration `Attach to Server`
-- In the [Extension Development Host] instance of VSCode, open a document in 'plain text' language mode.
-  - Type `j` or `t` to see `Javascript` and `TypeScript` completion.
-  - Enter text content such as `AAA aaa BBB`. The extension will emit diagnostics for all words in all-uppercase.
+You control the memory limit of the language server by setting `apl.server.maxWS` to a number followed by `[M|G]` (eg. 256M).
+
+To change the character(s) used for prefix completion, set the `apl.server.prefixCompleteCharacters` to one or more characters.
+
+The extension comes with an embedded copy of the [APL Language Server](https://github.com/optimasystems/apl-language-server). You can download a copy of the language server and then set the path to the dws in `apl.server.wsPath` to make use of an external language server.
+
+## Copyright
+
+The logo is Copyright © 2004 - 2018 Dyalog Ltd.

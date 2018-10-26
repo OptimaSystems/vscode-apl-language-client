@@ -4,7 +4,6 @@
  * ------------------------------------------------------------------------------------------ */
 'use strict';
 
-// import * as path from 'path';
 import {
 	window,
 	commands,
@@ -22,14 +21,15 @@ import {
 	spawn
 } from 'child_process';
 import * as net from 'net';
+import * as path from 'path';
 
 let client: LanguageClient;
 
 export async function activate(context: ExtensionContext) {
-	const conf = workspace.getConfiguration('apl');
-
-	const memoryLimit = conf.get<string>('memoryLimit') || '4G';
-	if (memoryLimit !== '-1' && !/^\d+[KMG]?$/.exec(memoryLimit)) {
+	const conf = workspace.getConfiguration('apl.server');
+	const maxWS = conf.get<string>('maxWS') || '2G';
+	
+	if (maxWS !== '-1' && !/^\d+[KMG]?$/.exec(maxWS)) {
 		const selected = await window.showErrorMessage(
 			'The memory limit you\'d provided is not numeric, nor "-1" nor valid Dyalog shorthand notation!',
 			'Open settings'
@@ -41,6 +41,9 @@ export async function activate(context: ExtensionContext) {
 	}
 	const executablePath = conf.get<string>('executablePath') ||
 		/^win/.test(process.platform) ? 'dyalog.exe' : 'mapl';
+
+	const serverPath = conf.get<string>('wsPath') || 
+		context.asAbsolutePath(path.join('server', 'apl-language-server.dws'));
 
 	const serverOptions = () => new Promise<ChildProcess | StreamInfo>((resolve) => {
 		// Use a TCP socket because of problems with blocking STDIO
@@ -56,12 +59,17 @@ export async function activate(context: ExtensionContext) {
 		// Listen on random port
 		server.listen(0, '127.0.0.1', () => {
 			// The server is implemented in APL
+			
 			const adr = server.address();
 			const hp = `${adr.address}:${adr.port}`;
-
-			let args = ['+s', '-q'];
+			
+			let args = [
+				serverPath,
+				'+s', 
+				'-q'
+			];
 			const stdio = ['pipe', 'ignore', 'ignore'];
-			if (/^win/i.test(process.platform)) { args = []; stdio[0] = 'ignore'; }
+			if (/^win/i.test(process.platform)) { args = [serverPath]; stdio[0] = 'ignore'; }
 
 			const childProcess = spawn(executablePath,
 				args,
@@ -73,8 +81,8 @@ export async function activate(context: ExtensionContext) {
 						{
 							CLASSICMODE: 1,
 							SINGLETRACE: 1,
-							RIDE_INIT: 'SERVE::4562',
-							MAXWS: memoryLimit,
+							MAXWS: maxWS,
+						//	RIDE_INIT: 'CONNECT::4562',
 							RIDE_SPAWNED: '1',
 							AUTOCOMPLETE_PREFIXSIZE: 0,
 							LSP_TCP: hp,
@@ -91,33 +99,6 @@ export async function activate(context: ExtensionContext) {
 			return childProcess;
 		});
 	});
-
-	// If the extension is launched in debug mode then the debug server options are used
-	// Otherwise the run options are used
-	// let serverOptions: ServerOptions = {
-	// 	run: { module: serverModule, transport: TransportKind.ipc },
-	// 	debug: {
-	// 		module: serverModule,
-	// 		transport: TransportKind.ipc,
-	// 		options: debugOptions
-	// 	}
-	// };
-
-	// let args: string[] = ['+s','-q','>/dev/null'];
-	// let options: ExecutableOptions = {
-	// 	env: {
-	// 		CLASSICMODE: 1,
-	// 		SINGLETRACE: 1,
-	// 		RIDE_INIT: 'SERVE::4502'
-	// 	},
-	// 	detached: true
-	// }
-	// // If the extension is launched in debug mode then the debug server options are used
-	// // Otherwise the run options are used
-	// let serverOptions: ServerOptions = {
-	// 	run : { command: serverMain, args, options, transport },
-	// 	debug : { command: serverMain, args, options, transport }
-	// }
 
 	// Options to control the language client
 	let clientOptions: LanguageClientOptions = {
@@ -152,10 +133,3 @@ export function deactivate(): Thenable<void> {
 	}
 	return client.stop();
 }
-
-// function binName() {
-// 	if (process.platform === 'win32')
-// 		return path.join('dyalog.exe');
-// 	else
-// 		return path.join('Applications','Dyalog-17.0.app','Contents','Resources','Dyalog','mapl');	
-// }
