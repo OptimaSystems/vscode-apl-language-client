@@ -2,7 +2,7 @@
 	"name": "vscode-apl-language-client",
     "displayName": "APL Language Server Client",
 	"description": "APL Language Server client for VS Code",
-	"version": "0.0.2",
+	"version": "0.0.3",
     "publisher": "OptimaSystems",
     "author": {
         "email": "gil@optima-systems.co.uk",
