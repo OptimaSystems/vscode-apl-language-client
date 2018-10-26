@@ -40,7 +40,7 @@ export async function activate(context: ExtensionContext) {
 		return;
 	}
 	const executablePath = conf.get<string>('executablePath') ||
-		/^win/.test(process.platform) ? 'dyalog.exe' : 'mapl';
+		(/^win/.test(process.platform) ? 'dyalog.exe' : 'mapl');
 
 	const serverPath = conf.get<string>('wsPath') || 
 		context.asAbsolutePath(path.join('server', 'apl-language-server.dws'));
@@ -90,12 +90,12 @@ export async function activate(context: ExtensionContext) {
 					),
 				},
 			);
-			childProcess.stderr.on('data', (chunk: Buffer) => {
-				console.error(chunk + '');
-			});
-			childProcess.stdout.on('data', (chunk: Buffer) => {
-				console.log(chunk + '');
-			});
+			// childProcess.stderr.on('data', (chunk: Buffer) => {
+			// 	console.error(chunk + '');
+			// });
+			// childProcess.stdout.on('data', (chunk: Buffer) => {
+			// 	console.log(chunk + '');
+			// });
 			return childProcess;
 		});
 	});

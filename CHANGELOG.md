@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+## 0.0.6
+- executable path config read correctly
+
 ## 0.0.5
 - update embedded language server
 
