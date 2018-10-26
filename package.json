@@ -1,16 +1,16 @@
 {
 	"name": "vscode-apl-language-client",
-    "displayName": "APL Language Server Client",
+	"displayName": "APL Language Server Client",
 	"description": "APL Language Server client for VS Code",
-	"version": "0.0.3",
-    "publisher": "OptimaSystems",
-    "author": {
-        "email": "gil@optima-systems.co.uk",
-        "name": "Gilgamesh Athoraya",
-        "url": "https://github.com/e9gille"
-    },
+	"version": "0.0.4",
+	"publisher": "OptimaSystems",
+	"author": {
+		"email": "gil@optima-systems.co.uk",
+		"name": "Gilgamesh Athoraya",
+		"url": "https://github.com/e9gille"
+	},
 	"license": "MIT",
-    "icon": "images/logo.png",
+	"icon": "images/logo.png",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/optimasystems/vscode-apl-language-client.git"
@@ -45,16 +45,16 @@
 				},
 				"apl.server.executablePath": {
 					"type": [
-					  "string",
-					  "null"
+						"string",
+						"null"
 					],
 					"default": null,
 					"description": "The path to a Dyalog executable."
 				},
 				"apl.server.wsPath": {
 					"type": [
-					  "string",
-					  "null"
+						"string",
+						"null"
 					],
 					"default": null,
 					"description": "The path to a Language server workspace."
@@ -83,8 +83,5 @@
 	"dependencies": {
 		"vscode": "^1.1.21",
 		"vscode-languageclient": "^5.1.0"
-	},
-	"extensionDependencies": [
-		"optimasystems.vscode-apl-language"
-	]
+	}
 }
