@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+## 0.0.7
+- update dependencies following flatmap-stream vulnerability
+
 ## 0.0.6
 - executable path config read correctly
 
