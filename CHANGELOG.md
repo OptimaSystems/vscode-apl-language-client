@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+## 0.0.8
+- move vscode to devDependencies
+
 ## 0.0.7
 - update dependencies following flatmap-stream vulnerability
 

@@ -2,7 +2,7 @@
 	"name": "vscode-apl-language-client",
 	"displayName": "APL Language Server Client",
 	"description": "APL Language Server client for VS Code",
-	"version": "0.0.7",
+	"version": "0.0.8",
 	"publisher": "OptimaSystems",
 	"author": {
 		"email": "gil@optima-systems.co.uk",
@@ -76,12 +76,12 @@
 		"test": "sh ./scripts/e2e.sh"
 	},
 	"devDependencies": {
+		"vscode": "^1.1.22",
 		"@types/mocha": "^5.2.5",
 		"@types/node": "^8.10.38",
 		"typescript": "2.8.3"
 	},
 	"dependencies": {
-		"vscode": "^1.1.22",
 		"vscode-languageclient": "^5.1.1"
 	}
 }
