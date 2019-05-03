@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+## 0.0.9
+- update dependencies
+- improve settings descriptions
+
 ## 0.0.8
 - move vscode to devDependencies
 

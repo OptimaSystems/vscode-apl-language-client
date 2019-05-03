@@ -90,24 +90,21 @@ export async function activate(context: ExtensionContext) {
 					),
 				},
 			);
-			// childProcess.stderr.on('data', (chunk: Buffer) => {
-			// 	console.error(chunk + '');
-			// });
-			// childProcess.stdout.on('data', (chunk: Buffer) => {
-			// 	console.log(chunk + '');
-			// });
+			childProcess.on('error', (err) => {
+				window.showErrorMessage(`Failed launching the APL Language Server\n${err.name}\n${err.message}`);
+			});
 			return childProcess;
 		});
 	});
 
 	// Options to control the language client
 	let clientOptions: LanguageClientOptions = {
-		// Register the server for F# documents
+		// Register the server for APL documents
 		documentSelector: [{ scheme: 'file', language: 'apl' }],
 		synchronize: {
 			// Synchronize the setting section 'languageServerExample' to the server
 			configurationSection: 'apl',
-			// Notify the server about file changes to F# project files contain in the workspace
+			// Notify the server about file changes to APL project files contain in the workspace
 			// TODO: is there a way to configure this via the language server protocol?
 			fileEvents: [
 				workspace.createFileSystemWatcher('**/acreproject.txt'),
