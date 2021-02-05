@@ -1,7 +1,7 @@
 /* --------------------------------------------------------------------------------------------
- * Copyright (c) Microsoft Corporation. All rights reserved.
- * Licensed under the MIT License. See License.txt in the project root for license information.
- * ------------------------------------------------------------------------------------------ */
+* Copyright (c) Microsoft Corporation. All rights reserved.
+* Licensed under the MIT License. See License.txt in the project root for license information.
+* ------------------------------------------------------------------------------------------ */
 'use strict';
 
 import {
@@ -44,6 +44,7 @@ export async function activate(context: ExtensionContext) {
 
 	const serverPath = conf.get<string>('wsPath') || 
 		context.asAbsolutePath(path.join('server', 'apl-language-server.dws'));
+		const dyalogEnvVars = conf.get('dyalogEnvVars');
 
 	const serverOptions = () => new Promise<ChildProcess | StreamInfo>((resolve) => {
 		// Use a TCP socket because of problems with blocking STDIO
@@ -87,6 +88,7 @@ export async function activate(context: ExtensionContext) {
 							AUTOCOMPLETE_PREFIXSIZE: 0,
 							LSP_TCP: hp,
 						},
+						dyalogEnvVars,  // these will override the previous defaults
 					),
 				},
 			);

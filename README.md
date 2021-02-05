@@ -27,7 +27,8 @@ This extension has the configuration options listed below:
     "apl.server.executablePath": "dyalog.exe",
     "apl.server.maxWS": "4G",
     "apl.server.prefixCompleteCharacters": "`",
-    "apl.server.wsPath": "/my/own/apl-language-server.dws"
+    "apl.server.wsPath": "/my/own/apl-language-server.dws",
+    "apl.server.dyalogEnvVars": {}
 }
 ```
 

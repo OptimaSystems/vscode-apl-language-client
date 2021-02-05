@@ -1,6 +1,8 @@
 # Change Log
 
 ## [Unreleased]
+## 0.0.11
+- new setting "dyalogEnvVars" to set up environment variables that get passed to the interpreter
 
 ## 0.0.10
 - update dependencies

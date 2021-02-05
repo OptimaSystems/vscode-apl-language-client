@@ -51,6 +51,11 @@
 					"default": null,
 					"description": "The full path to a Dyalog executable (including the name of the binary)."
 				},
+				"apl.server.dyalogEnvVars": {
+					"type": "object",
+					"default": null,
+					"description": "Optional environment variables for the interpreter's environment (might be used for configuration)"
+				},
 				"apl.server.wsPath": {
 					"type": [
 						"string",
